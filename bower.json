@@ -1,0 +1,17 @@
+{
+  "name": "chatApp",
+  "description": "chat",
+  "main": "",
+  "authors": [
+    "canberk"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "chat",
+    "nodejs"
+  ],
+  "homepage": "https://github.com/canberkhayretdag/chatApp",
+  "dependencies": {
+    "angular": "^1.7.4"
+  }
+}
