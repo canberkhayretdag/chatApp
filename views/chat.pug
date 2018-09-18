@@ -1,0 +1,54 @@
+extends layout
+
+append stylesheets
+    link(rel='stylesheet', href='/stylesheets/chat.css')
+
+block content
+  div(ng-controller="chatController")
+    .wrapper
+      .container
+        .left
+          .top
+            ul.tab
+              li.conversations
+                a.active(href='#') Chats
+              li.onlineUsers
+                a(href='#') Online Users
+          ul.people
+            
+            li.person(ng-repeat="user in onlineList")
+              img(src="{{user.meta.profilePic}}")
+              span.name {{user.meta.name}}
+              span.preview &nbsp;
+              
+
+          .bottom
+            button New Group
+        .right
+          .top
+            span
+              span.name Dog Woofson
+          .chat.active-chat
+            .bubble.you
+              span Hakan Aydın
+              | Hello, can you hear me?
+            .bubble.you
+              span Hakan Aydın
+              | I'm in California dreaming
+            .bubble.me ... about who we used to be.
+            .bubble.me Are you serious?
+            .bubble.you
+              span Hakan Aydın
+              | When we were younger and free...
+            .bubble.you
+              span Hakan Aydın
+              | I've forgotten how it felt before
+          .write
+            input(type='text')
+            a.write-link.send(href='javascript:;')
+
+
+
+append javascripts
+  script(src="http://localhost:3000/socket.io/socket.io.js")
+  script(src="/javascripts/controller/chatController.js")

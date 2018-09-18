@@ -2,16 +2,23 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const session = require('express-session');
 const passport = require('passport');
+const redisStore = require('./server/redisStore');
 const logger = require('morgan');
 const dotenv = require('dotenv');
 dotenv.config();
 const indexRouter = require('./routes/index');
 const auth = require('./routes/auth');
+const chat = require('./routes/chat');
 
 const app = express();
 
 const db = require('./server/db')();
+
+//middleware
+const isAuthenticated = require('./middleware/isAuthenticated');
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -24,10 +31,23 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'bower_components')));
 
+app.use(session({
+  store: redisStore,
+  secret: process.env.SESSION_SECRET_KEY,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {maxAge: 14*24*3600000}
+}));
+
+
+
 app.use(passport.initialize());
+app.use(passport.session());
+
 
 app.use('/', indexRouter);
 app.use('/auth', auth);
+app.use('/chat', isAuthenticated, chat);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
